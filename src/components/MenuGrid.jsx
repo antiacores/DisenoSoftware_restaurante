@@ -127,6 +127,12 @@ const MenuGrid = ({ category }) => {
               <p className="text-gray-600 text-sm">
                 {dish.descripcion}
               </p>
+              <button 
+                onClick={() => addToCart(dish)}
+                className="mt-4 w-full bg-blue-950 text-white py-2 rounded hover:bg-blue-800"
+              >
+                Agregar al carrito
+              </button>
             </div>
           </div>
         ))}
