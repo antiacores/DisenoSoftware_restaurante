@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { loginUser, registerUser } from '../services/firebaseAuth'; // Importa las funciones correctamente
-import FondoRestaurante from "../assets/images/FondoRestaurante.jpeg";
+import FondoRestaurante from "../assets/FondoRestaurante.jpeg";
 
 const LoginForm = () => {
   const [isLoginMode, setIsLoginMode] = useState(true);
@@ -138,16 +138,7 @@ const LoginForm = () => {
               <p>{errorMessage}</p>
             </div>
           )}
-          {isLoginMode && (
-            <div className="text-center mt-4">
-              <a 
-                href="#" 
-                className="text-sm text-blue-950 hover:text-blue-800 hover:underline font-bold"
-              >
-                ¿Olvidaste tu contraseña?
-              </a>
-            </div>
-          )}
+          
           <div className="text-center mt-4">
             <button 
               type="button"
