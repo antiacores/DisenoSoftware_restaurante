@@ -18,7 +18,7 @@ function App() {
             <Route path="/login" element={<LoginForm />} />
             <Route path="/" element={<Dashboard />} />
             <Route path="/entradas" element={<MenuGrid category="Entradas" />} />
-            <Route path="/platos-fuertes" element={<MenuGrid category="PlatosFuertes" />} />
+            <Route path="/platos-fuertes" element={<MenuGrid category="Platos fuertes" />} />
             <Route path="/postres" element={<MenuGrid category="Postres" />} />
             <Route path="/bebidas" element={<MenuGrid category="Bebidas" />} />
             <Route path="/dashboard" element={<Dashboard />} />
