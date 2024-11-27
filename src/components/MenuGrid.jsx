@@ -1,23 +1,28 @@
 import React, { useState, useEffect } from 'react';
 import { doc, getDoc } from 'firebase/firestore';
 import { db } from '../services/firebaseConfig';
-import baklava from "../assets/images/baklava.jpg"
-import falafel from "../assets/images/falafel.jpg";
-import berenjena from "../assets/images/berenjena.jpg";
-import ceviche from "../assets/images/ceviche.jpg";
-import coctel from "../assets/images/coctel.jpg";
-import ensalada_griega from "../assets/images/ensalada_griega.jpg";
-import hummus from "../assets/images/hummus.jpg";
-import limonada from "../assets/images/limonada.jpg";
-import mojito from "../assets/images/mojito.jpg";
-import paella from "../assets/images/paella.jpg";
-import pastel_limon from "../assets/images/pastel_limon.jpg";
-import pescado from "../assets/images/pescado.jpg";
-import pesto from "../assets/images/pesto.jpg";
-import ratatouille from "../assets/images/ratatouille.jpg";
-import sangria from "../assets/images/sangria.jpg";
-import souvlaki from "../assets/images/souvlaki.jpg";
-import tabule from "../assets/images/tabule.jpg";
+import { collection, getDocs } from 'firebase/firestore';
+
+// Importar y mapear imágenes
+const images = {
+  baklava: (await import("../assets/images/baklava.jpg")).default,
+  falafel: (await import("../assets/images/falafel.jpg")).default,
+  berenjena: (await import("../assets/images/berenjena.jpg")).default,
+  ceviche: (await import("../assets/images/ceviche.jpg")).default,
+  coctel: (await import("../assets/images/coctel.jpg")).default,
+  ensalada_griega: (await import("../assets/images/ensalada_griega.jpg")).default,
+  hummus: (await import("../assets/images/hummus.jpg")).default,
+  limonada: (await import("../assets/images/limonada.jpg")).default,
+  mojito: (await import("../assets/images/mojito.jpg")).default,
+  paella: (await import("../assets/images/paella.jpg")).default,
+  pastel_limon: (await import("../assets/images/pastel_limon.jpg")).default,
+  pescado: (await import("../assets/images/pescado.jpg")).default,
+  pesto: (await import("../assets/images/pesto.jpg")).default,
+  ratatouille: (await import("../assets/images/ratatouille.jpg")).default,
+  sangria: (await import("../assets/images/sangria.jpg")).default,
+  souvlaki: (await import("../assets/images/souvlaki.jpg")).default,
+  tabule: (await import("../assets/images/tabule.jpg")).default
+};
 
 const MenuGrid = ({ category }) => {
   const [dishes, setDishes] = useState([]);
@@ -26,42 +31,29 @@ const MenuGrid = ({ category }) => {
 
   useEffect(() => {
     const fetchDishes = async () => {
-      if (!category) {
-        setError('No se especificó una categoría');
-        setLoading(false);
-        return;
-      }
-
       try {
         setLoading(true);
-        console.log('Intentando obtener documento:', category);
+        // Obtener colección específica basada en la categoría
+        const menuRef = collection(db, 'menu', category, 'items');
+        const snapshot = await getDocs(menuRef);
         
-        const docRef = doc(db, 'menu', category);
-        const docSnap = await getDoc(docRef);
+        const dishesArray = snapshot.docs.map(doc => ({
+          id: doc.id,
+          ...doc.data()
+        }));
 
-        if (docSnap.exists()) {
-          console.log('Datos obtenidos:', docSnap.data());
-          const dishesArray = Object.entries(docSnap.data()).map(([id, dish]) => ({
-            id,
-            ...dish
-          }));
-          setDishes(dishesArray);
-          setError(null);
-        } else {
-          console.log('No se encontró el documento:', category);
-          setError(`No se encontraron platillos en la categoría: ${category}`);
-          setDishes([]);
-        }
+        setDishes(dishesArray);
       } catch (err) {
-        console.error('Error detallado:', err);
-        setError(`Error al cargar el menú: ${err.message}`);
-        setDishes([]);
+        console.error('Error:', err);
+        setError('Error al cargar el menú: ' + err.message);
       } finally {
         setLoading(false);
       }
     };
 
-    fetchDishes();
+    if (category) {
+      fetchDishes();
+    }
   }, [category]);
 
   if (loading) {
