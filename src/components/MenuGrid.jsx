@@ -1,7 +1,23 @@
 import React, { useState, useEffect } from 'react';
 import { doc, getDoc } from 'firebase/firestore';
 import { db } from '../services/firebaseConfig';
-import falafel from "../../assets/images/falafel";
+import baklava from "../assets/images/baklava.jpg"
+import falafel from "../assets/images/falafel.jpg";
+import berenjena from "../assets/images/berenjena.jpg";
+import ceviche from "../assets/images/ceviche.jpg";
+import coctel from "../assets/images/coctel.jpg";
+import ensalada_griega from "../assets/images/ensalada_griega.jpg";
+import hummus from "../assets/images/hummus.jpg";
+import limonada from "../assets/images/limonada.jpg";
+import mojito from "../assets/images/mojito.jpg";
+import paella from "../assets/images/paella.jpg";
+import pastel_limon from "../assets/images/pastel_limon.jpg";
+import pescado from "../assets/images/pescado.jpg";
+import pesto from "../assets/images/pesto.jpg";
+import ratatouille from "../assets/images/ratatouille.jpg";
+import sangria from "../assets/images/sangria.jpg";
+import souvlaki from "../assets/images/souvlaki.jpg";
+import tabule from "../assets/images/tabule.jpg";
 
 const MenuGrid = ({ category }) => {
   const [dishes, setDishes] = useState([]);
@@ -89,12 +105,12 @@ const MenuGrid = ({ category }) => {
           >
             <div className="relative h-48 w-full">
               <img
-                src={dish.imagen}
+                src={dish.image}
                 alt={dish.nombre}
                 className="w-full h-full object-cover"
                 onError={(e) => {
                   e.target.src = '/api/placeholder/400/300'; // Imagen por defecto si falla la carga
-                  console.log('Error al cargar imagen:', dish.imagen);
+                  console.log('Error al cargar imagen:', dish.image);
                 }}
               />
               <div className="absolute top-4 right-4 bg-white/90 px-3 py-1 rounded-full">
