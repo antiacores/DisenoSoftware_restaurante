@@ -18,7 +18,7 @@ const MainLayout = ({ children }) => {
   return (
     <div className="flex">
       <Sidebar />
-      <div className="flex-1 ml-0 lg:ml-64 pb-32">
+      <div className="flex-1 ml-0 lg:ml-16 pb-32">
         {React.cloneElement(children, { addToCart })}
         <CartSystem items={cartItems} setCartItems={setCartItems} />
       </div>
