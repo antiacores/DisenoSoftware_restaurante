@@ -105,12 +105,12 @@ const MenuGrid = ({ category }) => {
           >
             <div className="relative h-48 w-full">
               <img
-                src={dish.imagen}
+                src={dish.image}
                 alt={dish.nombre}
                 className="w-full h-full object-cover"
                 onError={(e) => {
                   e.target.src = '/api/placeholder/400/300'; // Imagen por defecto si falla la carga
-                  console.log('Error al cargar imagen:', dish.imagen);
+                  console.log('Error al cargar imagen:', dish.image);
                 }}
               />
               <div className="absolute top-4 right-4 bg-white/90 px-3 py-1 rounded-full">
