@@ -1,23 +1,50 @@
 import React, { useState } from 'react';
-import FondoRestaurante from "../assets/FondoRestaurante.jpeg";
+import { loginUser, registerUser } from '../services/firebaseAuth'; // Importa las funciones correctamente
+import FondoRestaurante from "../assets/images/FondoRestaurante.jpeg";
+
 const LoginForm = () => {
   const [isLoginMode, setIsLoginMode] = useState(true);
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
+  const [errorMessage, setErrorMessage] = useState(''); // Añadido para manejar errores
+  const [loading, setLoading] = useState(false); // Para manejar el estado de carga
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    
+
+    setErrorMessage(''); // Limpiar cualquier mensaje de error anterior
+    setLoading(true); // Mostrar indicador de carga
+
     if (isLoginMode) {
-      console.log('Intentando iniciar sesión', { email, password });
+      try {
+        // Intentar iniciar sesión
+        await loginUser(email, password);
+        console.log('Sesión iniciada con éxito');
+        // Redirigir a dashboard o pantalla de inicio después de iniciar sesión
+        window.location.href = "/dashboard";  // Aquí puedes redirigir a un dashboard
+      } catch (error) {
+        console.error('Error al iniciar sesión', error);
+        setErrorMessage('Error al iniciar sesión. Verifica tus credenciales.');
+      }
     } else {
       if (password !== confirmPassword) {
-        alert('Las contraseñas no coinciden');
+        setErrorMessage('Las contraseñas no coinciden');
+        setLoading(false);
         return;
       }
-      console.log('Intentando hacer el registro', { email, password });
+      try {
+        // Intentar crear una nueva cuenta
+        await registerUser(email, password);
+        console.log('Cuenta registrada con éxito');
+        // Redirigir a login después de registrarse
+        setIsLoginMode(true);
+      } catch (error) {
+        console.error('Error al registrarse', error);
+        setErrorMessage('Error al registrarse. Verifica los datos.');
+      }
     }
+    setLoading(false); // Ocultar indicador de carga después de la solicitud
   };
 
   const toggleMode = () => {
@@ -26,6 +53,7 @@ const LoginForm = () => {
     setEmail('');
     setPassword('');
     setConfirmPassword('');
+    setErrorMessage(''); // Limpiar el mensaje de error al cambiar el modo
   };
 
   return (
@@ -100,10 +128,16 @@ const LoginForm = () => {
               className="w-full bg-blue-950 text-white py-3 rounded-md hover:bg-blue-800 
                          transition duration-300 ease-in-out focus:outline-none focus:ring-2 
                          focus:ring-blue-800 focus:ring-opacity-50"
+              disabled={loading} // Deshabilitar el botón mientras se procesa
             >
-              {isLoginMode ? 'Iniciar Sesión' : 'Registrarse'}
+              {loading ? 'Cargando...' : isLoginMode ? 'Iniciar Sesión' : 'Registrarse'}
             </button>
           </div>
+          {errorMessage && (
+            <div className="text-red-500 text-center mt-4">
+              <p>{errorMessage}</p>
+            </div>
+          )}
           {isLoginMode && (
             <div className="text-center mt-4">
               <a 
